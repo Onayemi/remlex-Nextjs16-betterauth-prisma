@@ -1,0 +1,135 @@
+npx create-next-app@latest my-app
+
+npx shadcn@latest init
+npx shadcn@latest add button
+npx shadcn@latest add --all
+
+sfc  |  rafce  | rfc
+
+---- Seup Better Auth -------
+use better-auth.com website docs to setup
+# https://www.better-auth.com/docs/installation
+npm install better-auth
+
+.env
+BETTER_AUTH_SECRET=mcVSLmdenj1NFOuLxCEFLpvkJr6KyjMo
+BETTER_AUTH_URL=http://localhost:3000 # Base URL of your app
+
+--- lib/auth.ts -------
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+// If your Prisma file is located elsewhere, you can change the path
+import { PrismaClient } from "@/generated/prisma/client";
+
+const prisma = new PrismaClient();
+export const auth = betterAuth({
+    database: prismaAdapter(prisma, {
+        provider: "sqlite", // or "mysql", "postgresql", ...etc
+    }),
+});
+
+--- Setup Prisma ---
+# https://www.prisma.io/docs/guides/nextjs
+npm install prisma tsx --save-dev
+npm install @prisma/extension-accelerate @prisma/client dotenv
+
+npx prisma init --db --output ../app/generated/prisma
+# npx prisma init --datasource=provider sqlite|postgresql|mysql  # choose any sql
+
+---- prisma.config.ts ---
+import 'dotenv/config'
+import { defineConfig, env } from 'prisma/config';
+export default defineConfig({
+  schema: 'prisma/schema.prisma',
+  migrations: {
+    path: 'prisma/migrations'
+  },
+  engine: 'classic',
+  datasource: {
+    url: env('DATABASE_URL'),
+  },
+});
+
+
+----- lib/prisma.ts ------
+import { PrismaClient } from '../app/generated/prisma'
+import { withAccelerate } from '@prisma/extension-accelerate'
+
+const globalForPrisma = global as unknown as { 
+    prisma: PrismaClient
+}
+const db = globalForPrisma.prisma || new PrismaClient().$extends(withAccelerate())
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
+export default db;
+
+---- Generate prisma Client ---
+npx prisma generate
+
+---- Create Database Tables ---
+npx @better-auth/cli generate
+
+---- Migrate Database Tables to db ---
+npx prisma migrate dev --name init
+
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+
+# https://console.cloud.google.com/
+APIs & Services > OAuth consent screen > Create Credential or Clients > click on OAuth Client ID > Create Client > choose web application > under Authorized redirect add
+http://localhost:3000/api/auth/callback/google
+
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+
+---- app/api/auth/[...all]/route.ts -------
+import { auth } from "@/lib/auth"; // path to your auth file
+import { toNextJsHandler } from "better-auth/next-js";
+
+export const { POST, GET } = toNextJsHandler(auth);
+
+----- lib/auth.ts -------
+import { betterAuth } from "better-auth";
+import { prismaAdapter } from "better-auth/adapters/prisma";
+import db from "./prisma";
+import { nextCookies } from "better-auth/next-js";
+
+export const auth = betterAuth({
+    database: prismaAdapter(db, {
+        provider: "postgresql", // or "mysql", "postgresql", ...etc
+    }),
+    emailAndPassword: { 
+      enabled: true, 
+      minPasswordLength: 8,
+      maxPasswordLength: 128,
+      autoSignIn: true,
+    }, 
+    account: {
+      accountLinking: {
+        enabled: true,
+      }
+    },
+    socialProviders: { 
+      github: { 
+        clientId: process.env.GITHUB_CLIENT_ID!, 
+        clientSecret: process.env.GITHUB_CLIENT_SECRET!, 
+      }, 
+      google: { 
+        clientId: process.env.GITHUB_CLIENT_ID!, 
+        clientSecret: process.env.GIGOOGLETHUB_CLIENT_SECRET!, 
+      }, 
+    },
+    plugins: [nextCookies()],
+});
+
+
+----- lib/auth-client.ts -------
+import { createAuthClient } from "better-auth/react"
+export const authClient = createAuthClient({
+    /** The base URL of the server (optional if you're using the same domain) */
+    baseURL: "http://localhost:3000"
+})
+
+# https://tailark.com/
+npx shadcn add @tailark/login-1
+
+# Stop video in 1: 03:38

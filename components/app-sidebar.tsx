@@ -12,6 +12,7 @@ import {
   PieChart,
   Settings2,
   SquareTerminal,
+  User2Icon,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -35,7 +36,7 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
+      name: "Remlex Technologies",
       logo: GalleryVerticalEnd,
       plan: "Enterprise",
     },
@@ -153,6 +154,11 @@ const data = {
       url: "#",
       icon: Map,
     },
+    {
+      name: "Users",
+      url: "/dashboard/users",
+      icon: User2Icon,
+    },
   ],
 }
 
@@ -164,7 +170,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={data.teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        {/* <NavMain items={data.navMain} /> */}
         <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>

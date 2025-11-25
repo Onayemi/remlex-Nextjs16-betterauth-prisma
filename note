@@ -13,7 +13,15 @@ npm install better-auth
 
 .env
 BETTER_AUTH_SECRET=mcVSLmdenj1NFOuLxCEFLpvkJr6KyjMo
-BETTER_AUTH_URL=http://localhost:3000 # Base URL of your app
+BETTER_AUTH_URL="http://localhost:3000" # Base URL of your app
+NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+
+DATABASE_URL="postgresql://postgres:password@localhost:5432/nextjsv16-prisma?schema=public"
+
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
 --- lib/auth.ts -------
 import { betterAuth } from "better-auth";

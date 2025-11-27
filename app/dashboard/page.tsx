@@ -15,14 +15,15 @@ import {
 } from "@/components/ui/sidebar"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
-import NotFound from "../not-found"
+// import NotFound from "../not-found"
+import { redirect } from "next/navigation"
 
 export default async function Page() {
   const session = await auth.api.getSession({
     headers: await headers()
   })
 
-  if(!session) return <NotFound />
+  if(!session) return redirect("/login")
   // if(!session) return <div>Not authenticated</div>
 
   return (
@@ -39,13 +40,13 @@ export default async function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
+                  <BreadcrumbLink href="/dashboard">
+                    Dashboard
                   </BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>Index</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

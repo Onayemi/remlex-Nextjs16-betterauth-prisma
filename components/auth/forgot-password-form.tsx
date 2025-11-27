@@ -19,12 +19,12 @@ export default function ForgotPasswordForm() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const { error } = await  forgetPassword({
+        const { error } = await forgetPassword({
             email,
             redirectTo:  `${window.location.origin}/forgot-account/forgot-password/reset-password`,
         });
         if(error){
-            setMessage("Something went wrong. lease try again.");
+            setMessage("Something went wrong. please try again.");
         }else{
             setMessage("Check your email for the reset link.");
         }

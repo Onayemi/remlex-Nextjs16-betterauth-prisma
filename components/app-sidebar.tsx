@@ -9,6 +9,7 @@ import {
   Frame,
   GalleryVerticalEnd,
   Map,
+  ParkingMeterIcon,
   PieChart,
   Settings2,
   SquareTerminal,
@@ -139,6 +140,11 @@ const data = {
     },
   ],
   projects: [
+    {
+      name: "Dashboard",
+      url: "/dashboard",
+      icon: ParkingMeterIcon,
+    },
     {
       name: "Design Engineering",
       url: "#",

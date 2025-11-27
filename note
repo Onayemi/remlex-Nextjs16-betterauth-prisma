@@ -141,3 +141,6 @@ export const authClient = createAuthClient({
 npx shadcn add @tailark/login-1
 
 # Stop video in 1: 03:38
+
+CRUD tutorial
+# https://tutorial101.blogspot.com/2024/03/nextjs-14-crud-and-search-with-prisma.html
